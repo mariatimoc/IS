@@ -1,7 +1,8 @@
 from fastapi import FastAPI
-from backend.database import get_connection
+from database import get_connection
 
 app = FastAPI()
+
 
 @app.get("/patients")
 def get_patients():
