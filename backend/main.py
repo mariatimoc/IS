@@ -68,6 +68,9 @@ def add_reading(data: dict):
     elif heart_rate > 100:
         msg = "Puls prea mare"
 
+    if msg is not None:
+        cursor.execute("INSERT INTO alerts (patient_id, message) VALUES (%s, %s)", (patient_id, msg),)
+
     if temperature < 35:
         msg = "Temperatura prea mica"
     elif temperature > 38:
