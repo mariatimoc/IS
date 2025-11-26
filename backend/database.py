@@ -4,7 +4,7 @@ def get_connection():
     connection = pymysql.connect (
         host="localhost",
         user="root",
-        password="Delia.mysql18",
+        password="",
         database="ehealth_db",
         cursorclass=pymysql.cursors.DictCursor
     )
