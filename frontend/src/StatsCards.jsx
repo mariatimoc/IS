@@ -7,7 +7,7 @@ export default function StateCards(){
 const[stats,setStats]=useState(null);
 
     useEffect(() =>{
-        fetch("http://127.0.0.1:8000/stats/1")
+        fetch("http://127.0.0.1:8000/patients/1/stats")
         .then(res=>res.json())
         .then(data=>setStats(data))
         .catch(err=>console.log("Eroare: " ,err));
@@ -24,9 +24,9 @@ const[stats,setStats]=useState(null);
             <h2>Statistici </h2>
 
             <ul>
-                <li><strong>Temperatura minima:</strong> {min} C</li>
-                <li>Temperatura maxima: {max} C</li>
-                <li><strong>Temperatura medie:</strong> {average} C </li>
+                <li><strong>Temperatura minima:</strong> {stats.min_temp} C</li>
+                <li>Temperatura maxima: {stats.max_temp} C</li>
+                <li><strong>Temperatura medie:</strong> {stats.avg_temp.toFixed(2)} C </li>
             </ul>
         </section>
     )
