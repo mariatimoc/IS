@@ -1,4 +1,3 @@
-//const values=[36.5,37.2,38.1,36.9];
 import {useEffect,useState} from "react";
 
 export default function StateCards(){
