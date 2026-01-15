@@ -15,7 +15,6 @@ const[stats,setStats]=useState(null);
     if(stats==null){
         return <p> Se incarca statisticile</p>;
     }
-    
 
 
     return(

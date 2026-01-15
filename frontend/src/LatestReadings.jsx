@@ -6,34 +6,39 @@
 };
 */
 
-import {useEffect,useEffectEvent,useState} from "react";
+import {useEffect,useState} from "react";
 
-export default function LatestReadings(){
+export default function LatestReadings({ patientId, refreshKey }){
 
     const[latest,setLatest]=useState(null);
+    const [loading, setLoading] = useState(false);
 
-    useEffect(() =>{
-        fetch("http://127.0.0.1:8000/latest")
+    useEffect(() => {
+    if (!patientId) {
+      setLatest(null);
+      return;
+    }
+    setLoading(true);
+        fetch(`http://127.0.0.1:8000/patients/${patientId}/latest-reading`)
         .then(res=>res.json())
         .then(data=>setLatest(data))
-        .catch(err=>console.log("Eroare: " ,err));
-    },[]);
+        .catch(err=>console.log("Eroare last reading: " ,err))
+         .finally(() => setLoading(false));
+    },[patientId, refreshKey]);
 
-    if(latest==null){
-        return <p> Se incarca utlimele valori</p>;
-    }
+    if (!patientId) return <p>Selecteaza un pacient ca sa vezi ultima masuratoare.</p>;
+    if (loading && latest == null) return <p>Se incarca ultimele valori...</p>;
+    if (latest == null) return <p>Nu exista masuratori pentru acest pacient.</p>;
     
 
     return(
         <section>
             <h2>Ultimele valori vitale masurate</h2>
 
-            <p><strong>Pacient:</strong> {latestReading.name}</p>
-
             <ul>
-                <li>Temperatura: {latestReading.temperature} C</li>
-                <li>Puls: {latestReading.heartRate} bpm</li>
-                <li>Ora ultimei masuratori: {latestReading.timestamp} </li>
+                <li>Temperatura: {latest.temperature} C</li>
+                <li>Puls: {latest.heart_rate} bpm</li>
+                <li>Ora ultimei masuratori: {latest.timestamp} </li>
             </ul>
         </section>
     );
