@@ -8,20 +8,27 @@
 
 import {useEffect,useState} from "react";
 
-export default function LatestReadings(){
+export default function LatestReadings({ patientId, refreshKey }){
 
     const[latest,setLatest]=useState(null);
+    const [loading, setLoading] = useState(false);
 
-    useEffect(() =>{
-        fetch("http://127.0.0.1:8000/patients/1/latest-reading")
+    useEffect(() => {
+    if (!patientId) {
+      setLatest(null);
+      return;
+    }
+    setLoading(true);
+        fetch(`http://127.0.0.1:8000/patients/${patientId}/latest-reading`)
         .then(res=>res.json())
         .then(data=>setLatest(data))
-        .catch(err=>console.log("Eroare: " ,err));
-    },[]);
+        .catch(err=>console.log("Eroare last reading: " ,err))
+         .finally(() => setLoading(false));
+    },[patientId, refreshKey]);
 
-    if(latest==null){
-        return <p> Se incarca utlimele valori</p>;
-    }
+    if (!patientId) return <p>Selecteaza un pacient ca sa vezi ultima masuratoare.</p>;
+    if (loading && latest == null) return <p>Se incarca ultimele valori...</p>;
+    if (latest == null) return <p>Nu exista masuratori pentru acest pacient.</p>;
     
 
     return(

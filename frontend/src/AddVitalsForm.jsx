@@ -42,10 +42,16 @@ export default function AddVitalsForm({patientId,onAdded}) {
             {!patientId ? (<p>Selecteaza un pacient mai intai</p>
             ) : (
                 <form onSubmit={submit} style={{display: "grid", gap: 8, maxWidth: 300}}>
-                    <label>Temperatura (°C): <input type="number" step="0.1" value={temperature}
-                                                    onChange={(e) => setTemperature(e.target.value)} required/> </label>
-                    <label>Puls (bpm) : <input type="number" value={heartRate}
-                                               onChange={(e) => setHeartRate(e.target.value)} required/> </label>
+                    <label style={{ display: "grid", gap: 6 }}>
+                          Temperatura (°C):
+                          <input type="number" value={temperature} onChange={(e) => setTemperature(e.target.value)} required />
+                        </label>
+
+                        <label style={{ display: "grid", gap: 6 }}>
+                          Puls (bpm):
+                          <input type="number" value={heartRate} onChange={(e) => setHeartRate(e.target.value)} required />
+                        </label>
+
                     <button type="submit">Trimite</button>
                     {status && <span> {status} </span>}
                 </form>

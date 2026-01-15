@@ -2,15 +2,34 @@ import {useState} from "react";
 
 import LatestReadings from "./LatestReadings";
 import PatientsList from "./PatientsList";
-import StateCards from "./StatsCards";
+import StatsCards from "./StatsCards";
 import Alerts from "./Alerts";
 import AddVitalsForm from "./AddVitalsForm";
-
+import Buttons from "./Buttons";
 
 
  export default function App(){
      const [selectedPatientId, setSelectedPatientId] = useState(null);
      const [refreshKey, setRefreshKey] = useState(0);
+
+     const [openAdd, setOpenAdd] = useState(false);
+     const [openLatest, setOpenLatest] = useState(false);
+
+
+     const actionBtnStyle = (disabled) => ({
+      minWidth: 230,
+      height: 44,
+      padding: "0 16px",
+      borderRadius: 10,
+      border: "1px solid rgba(255,255,255,0.15)",
+      background: disabled ? "rgba(255,255,255,0.06)" : "rgba(99,102,241,0.9)",
+      color: "white",
+      fontWeight: 600,
+      cursor: disabled ? "not-allowed" : "pointer",
+      boxShadow: disabled ? "none" : "0 8px 20px rgba(0,0,0,0.25)",
+      transition: "transform 120ms ease, background 120ms ease",
+    });
+
   return (
     <div>
       <h1>Aplicatie eHealth</h1>
@@ -20,16 +39,52 @@ import AddVitalsForm from "./AddVitalsForm";
       onSelectPatient={(id) => setSelectedPatientId(id)}
       />
 
-      <hr />
+      <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 10 }}>
+          <button
+            onClick={() => setOpenAdd(true)}
+            disabled={!selectedPatientId}
+            style={actionBtnStyle(!selectedPatientId)}
+          >Adauga masuratoare
+          </button>
+
+          <button
+          onClick={() => setOpenLatest(true)}
+          disabled={!selectedPatientId}
+          style={actionBtnStyle(!selectedPatientId)}
+        >
+          Ultimele valori masurate
+        </button>
+      </div>
+
+         {!selectedPatientId && (
+        <p style={{ opacity: 0.7, marginTop: 8 }}>
+          Selecteaza un pacient prima data.
+        </p>
+      )}
+
+      <hr/>
+
+        <Buttons title=""
+            open={openAdd}
+            onClose={() => setOpenAdd(false)}
+        >
         <AddVitalsForm
             patientId={selectedPatientId}
-            onAdded={() => setRefreshKey((refreshKey => refreshKey + 1))}
+            onAdded={() => {setRefreshKey((refreshKey) => refreshKey + 1);
+            setOpenAdd(false);
+            }}
         />
+        </Buttons>
 
-      <LatestReadings patientId={selectedPatientId} refreshKey={refreshKey} />
-      <hr />
+        <Buttons title=""
+            open={openLatest}
+            onClose={() => setOpenLatest(false)}
+        >
+            <LatestReadings patientId={selectedPatientId} refreshKey={refreshKey} />
+        </Buttons>
 
-      <StateCards patientId = {selectedPatientId} refreshKey={refreshKey} />
+
+      <StatsCards patientId = {selectedPatientId} refreshKey={refreshKey} />
       <hr />
       
       <Alerts patientId = {selectedPatientId} refreshKey={refreshKey}/>
