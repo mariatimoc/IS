@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Query
 from database import get_connection
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -35,7 +35,7 @@ def get_readings(patient_id: int):
     "               WHERE patient_id = %s" \
     "               ORDER BY timestamp ASC", (patient_id,),
     )
-                
+
     results = cursor.fetchall()
     cursor.close()
     connection.close()
@@ -53,7 +53,7 @@ def get_latest_reading(patient_id: int):
     "               ORDER BY timestamp DESC" \
     "               LIMIT 1", (patient_id,),
     )
-                
+
     result = cursor.fetchone()
     cursor.close()
     connection.close()
@@ -69,25 +69,29 @@ def add_reading(data: dict):
     heart_rate = data["heart_rate"]
     temperature = data["temperature"]
 
-    cursor.execute("INSERT INTO readings (patient_id, heart_rate, temperature) VALUES (%s, %s, %s)", (patient_id, heart_rate, temperature),)
-    
-    msg = None
-    if heart_rate < 50:
-        msg = "Puls prea mic"
-    elif heart_rate > 100:
-        msg = "Puls prea mare"
+    cursor.execute(
+        "INSERT INTO readings (patient_id, heart_rate, temperature) VALUES (%s, %s, %s)",
+        (patient_id, heart_rate, temperature),
+    )
 
-    if msg is not None:
-        cursor.execute("INSERT INTO alerts (patient_id, message) VALUES (%s, %s)", (patient_id, msg),)
+    messages = []
+
+    if heart_rate < 50:
+        messages.append("Puls prea mic")
+    elif heart_rate > 100:
+        messages.append("Puls prea mare")
 
     if temperature < 35:
-        msg = "Temperatura prea mica"
+        messages.append("Temperatura prea mica")
     elif temperature > 38:
-        msg = "Temperatura prea mare"
+        messages.append("Temperatura prea mare")
 
-    if msg is not None:
-        cursor.execute("INSERT INTO alerts (patient_id, message) VALUES (%s, %s)", (patient_id, msg),)
-    
+    if messages:
+        cursor.execute(
+            "INSERT INTO alerts (patient_id, message) VALUES (%s, %s)",
+            (patient_id, "; ".join(messages)),
+        )
+
     connection.commit()
     cursor.close()
     connection.close()
@@ -111,18 +115,35 @@ def get_stats(patient_id: int):
     return stats
 
 @app.get("/alerts")
-def get_alerts():
+def get_alerts(patient_id: int | None = Query(default=None)):
     connection = get_connection()
     cursor = connection.cursor()
 
-    cursor.execute("SELECT alerts.id, patients.name AS patient, alerts.message, alerts.timestamp AS time \
-                    FROM alerts \
-                    JOIN patients ON alerts.patient_id = patients.id \
-                    ORDER BY alerts.timestamp DESC"
-    )
+    if patient_id is None:
+        cursor.execute("""
+            SELECT alerts.id,
+                   alerts.patient_id,
+                   patients.name AS patient,
+                   alerts.message,
+                   alerts.timestamp AS time
+            FROM alerts
+            JOIN patients ON alerts.patient_id = patients.id
+            ORDER BY alerts.timestamp DESC
+        """)
+    else:
+        cursor.execute("""
+            SELECT alerts.id,
+                   alerts.patient_id,
+                   patients.name AS patient,
+                   alerts.message,
+                   alerts.timestamp AS time
+            FROM alerts
+            JOIN patients ON alerts.patient_id = patients.id
+            WHERE alerts.patient_id = %s
+            ORDER BY alerts.timestamp DESC
+        """, (patient_id,))
 
     results = cursor.fetchall()
     cursor.close()
     connection.close()
-
     return results
