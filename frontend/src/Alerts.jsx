@@ -37,8 +37,8 @@ export default function Alerts(){
 
             <ul>
                 {alerts.map(a=>(<li key={a.id}>
-                    <strong> {a.patient}</strong> - {a.message} ({a.time})
-                </li>
+                <strong>{a.patient}</strong> - {a.message} ({a.time?.replace("T", " ").slice(0, 16)})
+        </li>
             ))}
             </ul>
             <button onClick={exportTxt}>Exporta in .txt</button>
