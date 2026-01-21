@@ -1,7 +1,4 @@
 __pycache__/
 *.pyc
 venv/
-frontend/
-Documentatie.docx
 .idea/
-~$*.docx
