@@ -6,6 +6,13 @@ export default function PatientsList({selectedPatientId,onSelectPatient}){
     const [patients,setPatients]=useState([]); //useState e folosit pt datele care se schimba
     const [loading,setLoading]=useState(true);
     
+
+    const onlyNumber = (code) => {
+    const digits = String(code ?? "").replace(/\D/g, ""); 
+    const n = parseInt(digits, 10); 
+    return Number.isFinite(n) ? n : code;
+    };
+
     //useEffect se executa automata cand se incarca pagina,ia pacientii din backend
     useEffect(() =>{
         setLoading(true);
@@ -36,7 +43,7 @@ export default function PatientsList({selectedPatientId,onSelectPatient}){
                             textDecoration: p.id === selectedPatientId ? "underline" : "none",
                             marginBottom: 6,
                         }}
-                     >{p.name} (Varsta: {p.age}) -{p.code} -{p.salon}
+                     >{p.name} (Varsta: {p.age}) -Pacient {onlyNumber(p.code)} -{p.salon}
                      </li>
                  ))}
              </ul>

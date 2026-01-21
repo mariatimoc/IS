@@ -38,7 +38,8 @@ export default function LatestReadings({ patientId, refreshKey }){
             <ul>
                 <li>Temperatura: {latest.temperature} C</li>
                 <li>Puls: {latest.heart_rate} bpm</li>
-                <li>Ora ultimei masuratori: {latest.timestamp} </li>
+                <li>Ora ultimei masuratori: {latest.timestamp?.replace("T", " ").slice(0, 16)} </li>
+    
             </ul>
         </section>
     );

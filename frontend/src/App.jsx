@@ -6,6 +6,9 @@ import StatsCards from "./StatsCards";
 import Alerts from "./Alerts";
 import AddVitalsForm from "./AddVitalsForm";
 import Buttons from "./Buttons";
+import AllReadings from "./AllReadings";
+
+
 
 
  export default function App(){
@@ -14,6 +17,8 @@ import Buttons from "./Buttons";
 
      const [openAdd, setOpenAdd] = useState(false);
      const [openLatest, setOpenLatest] = useState(false);
+     const [openAll, setOpenAll] = useState(false);
+
 
 
      const actionBtnStyle = (disabled) => ({
@@ -54,13 +59,20 @@ import Buttons from "./Buttons";
         >
           Ultimele valori masurate
         </button>
+
+
+          <button
+          onClick={() => setOpenAll(true)}
+          disabled={!selectedPatientId}
+          style={actionBtnStyle(!selectedPatientId)}
+        >
+          Istoric masuratori
+        </button>
+
+
+
       </div>
 
-         {!selectedPatientId && (
-        <p style={{ opacity: 0.7, marginTop: 8 }}>
-          Selecteaza un pacient prima data.
-        </p>
-      )}
 
       <hr/>
 
@@ -81,6 +93,13 @@ import Buttons from "./Buttons";
             onClose={() => setOpenLatest(false)}
         >
             <LatestReadings patientId={selectedPatientId} refreshKey={refreshKey} />
+        </Buttons>
+
+        <Buttons title=""
+        open={openAll}
+        onClose={() => setOpenAll(false)}
+        >
+          <AllReadings patientId ={selectedPatientId} refreshKey={refreshKey} />
         </Buttons>
 
 
