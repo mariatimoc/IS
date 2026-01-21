@@ -88,6 +88,7 @@ import AllReadings from "./AllReadings";
           Alerte pacient selectat
         </button>
 
+
       </div>
 
 
@@ -119,6 +120,7 @@ import AllReadings from "./AllReadings";
           <AllReadings patientId ={selectedPatientId} refreshKey={refreshKey} />
         </Buttons>
 
+
         <Buttons title=""
         open={openAlertsAll}
         onClose={() => setOpenAlertsAll(false)}
@@ -140,6 +142,8 @@ import AllReadings from "./AllReadings";
       <StatsCards patientId = {selectedPatientId} refreshKey={refreshKey} />
       <hr />
       
+      <Alerts patientId = {selectedPatientId} refreshKey={refreshKey}/>
+
     </div>
   );
  }

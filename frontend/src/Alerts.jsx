@@ -1,10 +1,3 @@
-/*const alerts = [
-  { id: 1, patient: "Ion Popescu", message: "Temperatură ridicată (38.9 °C)", time: "20:30" },
-  { id: 2, patient: "Maria Ionescu", message: "Puls scăzut (45 bpm)", time: "19:50" },
-];
-*/
-
-
 import { useEffect, useState } from "react";
 export default function Alerts({ patientId = null, refreshKey = 0, title = "Alerte pacienti" }) {
 
