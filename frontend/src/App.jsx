@@ -18,6 +18,9 @@ import AllReadings from "./AllReadings";
      const [openAdd, setOpenAdd] = useState(false);
      const [openLatest, setOpenLatest] = useState(false);
      const [openAll, setOpenAll] = useState(false);
+     const [openAlertsAll, setOpenAlertsAll] = useState(false);
+     const [openAlertsPatient, setOpenAlertsPatient] = useState(false);
+     const [openStats, setOpenStats] = useState(false);
 
 
 
@@ -70,6 +73,31 @@ import AllReadings from "./AllReadings";
         </button>
 
 
+        <button
+          onClick={() => setOpenAlertsAll(true)}
+          style={actionBtnStyle(false)}
+        >
+          Alerte pacienti
+        </button>
+
+
+        <button
+          onClick={() => setOpenAlertsPatient(true)}
+          disabled={!selectedPatientId}
+          style={actionBtnStyle(!selectedPatientId)}
+        >
+          Alerte pacient selectat
+        </button>
+
+        <button
+          onClick={() => setOpenStats(true)}
+          disabled={!selectedPatientId}
+          style={actionBtnStyle(!selectedPatientId)}
+        >
+          Statistici pacient selectat
+        </button>
+
+
 
       </div>
 
@@ -103,10 +131,34 @@ import AllReadings from "./AllReadings";
         </Buttons>
 
 
-      <StatsCards patientId = {selectedPatientId} refreshKey={refreshKey} />
+        <Buttons title=""
+        open={openAlertsAll}
+        onClose={() => setOpenAlertsAll(false)}
+        >
+          <Alerts refreshKey={refreshKey} />
+        </Buttons>
+
+        <Buttons title=""
+        open={openAlertsPatient}
+        onClose={() => setOpenAlertsPatient(false)}
+        >
+          <Alerts 
+            patientId={selectedPatientId}
+            refreshKey={refreshKey}
+            title={`Alerte pacient ${selectedPatientId}`} />
+        </Buttons>
+
+        <Buttons title=""
+        open={openStats}
+        onClose={() => setOpenStats(false)}
+        >
+          <StatsCards patientId={selectedPatientId} refreshKey={refreshKey} />
+        </Buttons>
+
+
       <hr />
       
-      <Alerts patientId = {selectedPatientId} refreshKey={refreshKey}/>
+
     </div>
   );
  }
