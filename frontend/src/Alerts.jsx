@@ -30,13 +30,17 @@ export default function Alerts({ patientId = null, refreshKey = 0, title = "Aler
         <section>
             <h2> {title}</h2>
 
-            <ul>
-                {alerts.map(a=>(
-                <li key={a.id}>
-                    <strong>{a.patient}</strong> - {a.message} ({a.time?.replace("T", " ").slice(0, 16)})
-                </li>
-            ))}
-            </ul>
+            {patientId && alerts.length === 0 ? (
+                <p>Nu exista alerte pentru pacientul selectat.</p>
+            ) : (
+                <ul>
+                    {alerts.map((a) => (
+                        <li key={a.id}>
+                            <strong>{a.patient}</strong> - {a.message} ({a.time?.replace("T", " ").slice(0, 16)})
+                        </li>
+                    ))}
+                </ul>
+            )}
             <button onClick={exportTxt}>Exporta in .txt</button>
         </section>
     )

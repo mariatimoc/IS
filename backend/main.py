@@ -103,7 +103,8 @@ def get_stats(patient_id: int):
     connection = get_connection()
     cursor = connection.cursor()
 
-    cursor.execute("SELECT MIN(temperature) AS min_temp, MAX(temperature) AS max_temp, AVG(temperature) AS avg_temp \
+    cursor.execute("SELECT MIN(temperature) AS min_temp, MAX(temperature) AS max_temp, AVG(temperature) AS avg_temp, \
+                    MIN(heart_rate) AS min_rate, MAX(heart_rate) AS max_rate, AVG(heart_rate) AS avg_rate \
                     FROM readings \
                     WHERE patient_id = %s", (patient_id,),
     )

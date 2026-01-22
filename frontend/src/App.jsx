@@ -19,7 +19,8 @@ import AllReadings from "./AllReadings";
      const [openLatest, setOpenLatest] = useState(false);
      const [openAll, setOpenAll] = useState(false);
      const [openAlertsAll, setOpenAlertsAll] = useState(false);
-    const [openAlertsPatient, setOpenAlertsPatient] = useState(false);
+     const [openAlertsPatient, setOpenAlertsPatient] = useState(false);
+     const [openStats, setOpenStats] = useState(false);
 
 
 
@@ -88,6 +89,15 @@ import AllReadings from "./AllReadings";
           Alerte pacient selectat
         </button>
 
+        <button
+          onClick={() => setOpenStats(true)}
+          disabled={!selectedPatientId}
+          style={actionBtnStyle(!selectedPatientId)}
+        >
+          Statistici pacient selectat
+        </button>
+
+
 
       </div>
 
@@ -138,11 +148,16 @@ import AllReadings from "./AllReadings";
             title={`Alerte pacient ${selectedPatientId}`} />
         </Buttons>
 
+        <Buttons title=""
+        open={openStats}
+        onClose={() => setOpenStats(false)}
+        >
+          <StatsCards patientId={selectedPatientId} refreshKey={refreshKey} />
+        </Buttons>
 
-      <StatsCards patientId = {selectedPatientId} refreshKey={refreshKey} />
+
       <hr />
       
-      <Alerts patientId = {selectedPatientId} refreshKey={refreshKey}/>
 
     </div>
   );
